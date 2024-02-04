@@ -1,7 +1,10 @@
 import { createHash } from 'node:crypto';
 
-const publicKey = "a1300ede5d035aa6c05e527046c7f033"
-const privateKey = "3cc287b8c354657dfbf3f564658b47a6adbf1914"
+import dotenv from 'dotenv';
+dotenv.config();
+
+const publicKey = process.env.MARVEL_API_PUBLIC_KEY
+const privateKey = process.env.MARVEL_API_PRIVATE_KEY
 const url = "https://gateway.marvel.com:443/v1/public/characters?apikey=a1300ede5d035aa6c05e527046c7f033"
 
 /**
