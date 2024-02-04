@@ -1,4 +1,8 @@
+import { createHash } from 'node:crypto';
 
+const publicKey = "a1300ede5d035aa6c05e527046c7f033"
+const privateKey = "3cc287b8c354657dfbf3f564658b47a6adbf1914"
+const url = "https://gateway.marvel.com:443/v1/public/characters?apikey=a1300ede5d035aa6c05e527046c7f033"
 
 /**
  * Récupère les données de l'endpoint en utilisant les identifiants
@@ -7,8 +11,26 @@
  * @return {Promise<json>}
  */
 export const getData = async (url) => {
-    // A Compléter
-}
+    const ts = new Date().getTime();
+    url += "&hash=" + await getHash(ts, privateKey, publicKey);
+    url += "&ts=" + ts;
+
+    const response = await fetch(url);
+    const rawData = await response.json();
+
+    // Filtrer les résultats selon les conditions spécifiées
+    const filteredResults = []
+
+    rawData.data.results.forEach((e) => {
+        if(!e.thumbnail.path.toString().includes("image_not_available")){
+            filteredResults.push({name : e.name ,description: e.description, img : e.thumbnail.path +"."+ e.thumbnail.extension})
+        }
+    });
+
+    // Retourner les résultats filtrés
+    return filteredResults;
+};
+
 
 /**
  * Calcul la valeur md5 dans l'ordre : timestamp+privateKey+publicKey
@@ -18,6 +40,9 @@ export const getData = async (url) => {
  * @param timestamp
  * @return {Promise<ArrayBuffer>} en hexadecimal
  */
-export const getHash = async (publicKey, privateKey, timestamp) => {
-    // A compléter
+
+export const getHash = async (timestamp , privateKey, publicKey) => {
+    return createHash('md5').update(timestamp + privateKey + publicKey).digest("hex")
 }
+
+console.log(await getData(url))
