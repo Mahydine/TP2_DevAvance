@@ -23,7 +23,7 @@ async function runServer(){
         return res.view('src/templates/index.hbs', {comics: comicsData})
     })
 
-    app.listen({ port: 3000 })
+    app.listen({ port: 3000, host:"0.0.0.0"})
 }
 
 runServer()
