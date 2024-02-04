@@ -1,3 +1,2 @@
 node_modules
 package-lock.json
-#src/.env (doit être dé-commenté normalement car sensible)
